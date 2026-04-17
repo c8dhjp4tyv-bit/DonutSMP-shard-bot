@@ -1,0 +1,21 @@
+{
+  "name": "donutsmp-afk-bot",
+  "version": "1.0.0",
+  "description": "A Minecraft AFK bot for DonutSMP using Mineflayer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "minecraft",
+    "mineflayer",
+    "bot",
+    "afk"
+  ],
+  "author": "c8dhjp4tyv-bit",
+  "license": "MIT",
+  "dependencies": {
+    "mineflayer": "^4.20.0",
+    "mineflayer-pathfinder": "^2.4.5"
+  }
+}
