@@ -6,16 +6,10 @@
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [
-    "minecraft",
-    "mineflayer",
-    "bot",
-    "afk"
-  ],
+  "keywords": ["minecraft", "mineflayer", "bot", "afk"],
   "author": "c8dhjp4tyv-bit",
   "license": "MIT",
   "dependencies": {
-    "mineflayer": "^4.20.0",
-    "mineflayer-pathfinder": "^2.4.5"
+    "mineflayer": "^4.20.0"
   }
 }
