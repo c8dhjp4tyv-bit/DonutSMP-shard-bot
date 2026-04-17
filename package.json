@@ -1,5 +1,5 @@
 {
-  "name": "donutsmp-afk-bot",
+  "name": "donutsmp-shard-bot",
   "version": "1.0.0",
   "description": "A Minecraft AFK bot for DonutSMP using Mineflayer",
   "main": "index.js",
