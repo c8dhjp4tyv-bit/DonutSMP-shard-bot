@@ -1,5 +1,4 @@
 const mineflayer = require('mineflayer')
-const { pathfinder } = require('mineflayer-pathfinder')
 const readline = require('readline')
 
 const rl = readline.createInterface({
@@ -9,6 +8,7 @@ const rl = readline.createInterface({
 
 let bot = null
 let reconnectAttempts = 0
+let savedUsername = null
 const MAX_RECONNECT = 30
 
 function askUsername() {
@@ -25,6 +25,7 @@ function askUsername() {
 }
 
 async function createBot(username) {
+  savedUsername = username
   console.log(`\nConnecting with account: ${username}...`)
 
   bot = mineflayer.createBot({
@@ -34,11 +35,10 @@ async function createBot(username) {
     version: false
   })
 
-  bot.loadPlugin(pathfinder)
-
   bot.on('spawn', () => {
     console.log(`Successfully connected as ${username}`)
-    
+    reconnectAttempts = 0
+
     setTimeout(() => {
       bot.chat('/afk 20')
       console.log('Sent /afk 20 - AFK Lobby 20 activated')
@@ -85,7 +85,7 @@ function reconnect() {
 
   setTimeout(() => {
     if (bot) bot.quit()
-    askUsername().then(createBot)
+    createBot(savedUsername)
   }, 300000)
 }
 
