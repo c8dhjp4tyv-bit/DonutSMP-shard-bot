@@ -29,7 +29,7 @@ A simple Minecraft AFK bot built with **Mineflayer** that connects to `donutsmp.
 
 ```bash
 git clone https://github.com/c8dhjp4tyv-bit/DonutSMP-shard-bot.git
-cd donutsmp-shard-bot
+cd DonutSMP-shard-bot
 npm install mineflayer mineflayer-pathfinder
 ▶️ Usage
 node index.js
