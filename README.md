@@ -25,7 +25,104 @@ A simple Minecraft AFK bot built with **Mineflayer** that connects to `donutsmp.
 
 ---
 
+
+
+
+
+
 ## 📥 Installation
+
+Install node.js
+
+**Windows (PowerShell – winget)**
+
+```
+winget install OpenJS.NodeJS.LTS
+```
+
+**Windows (Chocolatey)**
+
+```
+choco install nodejs-lts
+```
+
+**macOS (Homebrew)**
+
+```
+brew install node
+```
+
+**Debian / Ubuntu**
+
+```
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Linux Mint**
+
+```
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Pop!_OS**
+
+```
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Kali Linux**
+
+```
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Fedora**
+
+```
+sudo dnf install -y nodejs
+```
+
+**RHEL / CentOS / Rocky / AlmaLinux**
+
+```
+curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
+sudo dnf install -y nodejs
+```
+
+**Arch Linux**
+
+```
+sudo pacman -S nodejs npm
+```
+
+**Manjaro**
+
+```
+sudo pacman -S nodejs npm
+```
+
+**openSUSE**
+
+```
+sudo zypper install nodejs20
+```
+
+**Alpine Linux**
+
+```
+sudo apk add nodejs npm
+```
+
+**Void Linux**
+
+```
+sudo xbps-install -S nodejs npm
+```
+
 
 ```bash
 git clone https://github.com/c8dhjp4tyv-bit/DonutSMP-shard-bot.git
