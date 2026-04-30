@@ -1,6 +1,6 @@
 {
   "name": "donutsmp-shard-bot",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A Minecraft AFK bot for DonutSMP using Mineflayer",
   "main": "index.js",
   "scripts": {
