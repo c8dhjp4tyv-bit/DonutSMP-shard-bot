@@ -9,6 +9,7 @@ const rl = readline.createInterface({
 let bot = null
 let reconnectAttempts = 0
 let savedUsername = null
+let reconnectTimer = null
 const MAX_RECONNECT = 30
 
 function askUsername() {
@@ -45,21 +46,28 @@ async function createBot(username) {
     }, 6000)
 
     setInterval(() => {
-      if (bot.entity) {
+      if (bot && bot.entity) {
         bot.setControlState('jump', true)
-        setTimeout(() => bot.setControlState('jump', false), 180)
+        setTimeout(() => {
+          if (bot) bot.setControlState('jump', false)
+        }, 180)
       }
     }, 550)
 
     setInterval(() => {
-      if (bot.entity) {
+      if (bot && bot.entity) {
         bot.look(bot.entity.yaw + (Math.random() * 0.8 - 0.4), bot.entity.pitch)
       }
     }, 8500)
   })
 
   bot.on('kicked', (reason) => {
-    console.log(`Kicked: ${reason}`)
+    try {
+      const parsed = typeof reason === 'string' ? JSON.parse(reason) : reason
+      console.log('Kicked:', JSON.stringify(parsed, null, 2))
+    } catch {
+      console.log('Kicked:', reason)
+    }
     reconnect()
   })
 
@@ -74,6 +82,9 @@ async function createBot(username) {
 }
 
 function reconnect() {
+  // Prevent duplicate reconnect timers
+  if (reconnectTimer) return
+
   if (reconnectAttempts >= MAX_RECONNECT) {
     console.log('Too many reconnect attempts. Stopping bot.')
     rl.close()
@@ -83,8 +94,15 @@ function reconnect() {
   reconnectAttempts++
   console.log(`Reconnect attempt ${reconnectAttempts}/${MAX_RECONNECT} - Waiting 5 minutes...`)
 
-  setTimeout(() => {
-    if (bot) bot.quit()
+  reconnectTimer = setTimeout(() => {
+    reconnectTimer = null
+
+    // FIX: use bot.end() instead of bot.quit()
+    if (bot && typeof bot.end === 'function') {
+      bot.end()
+    }
+    bot = null
+
     createBot(savedUsername)
   }, 300000)
 }
@@ -97,7 +115,9 @@ askUsername().then((username) => {
 
 process.on('SIGINT', () => {
   console.log('\nBot shutting down...')
-  if (bot) bot.quit()
+  if (reconnectTimer) clearTimeout(reconnectTimer)
+  // FIX: use bot.end() instead of bot.quit()
+  if (bot && typeof bot.end === 'function') bot.end()
   rl.close()
   process.exit(0)
 })
