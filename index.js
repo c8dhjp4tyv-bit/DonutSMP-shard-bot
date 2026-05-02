@@ -1,15 +1,15 @@
 const mineflayer = require('mineflayer')
 const readline = require('readline')
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 
 let bot = null
 let reconnectAttempts = 0
 let savedUsername = null
 let reconnectTimer = null
+let activeIntervals = []   // FIX 1: track all intervals
+let isReconnecting = false // FIX 3: prevent double-reconnect
+
 const MAX_RECONNECT = 30
 
 function askUsername() {
@@ -25,8 +25,14 @@ function askUsername() {
   })
 }
 
+function clearIntervals() {
+  activeIntervals.forEach(id => clearInterval(id))
+  activeIntervals = []
+}
+
 async function createBot(username) {
   savedUsername = username
+  isReconnecting = false
   console.log(`\nConnecting with account: ${username}...`)
 
   bot = mineflayer.createBot({
@@ -39,26 +45,34 @@ async function createBot(username) {
   bot.on('spawn', () => {
     console.log(`Successfully connected as ${username}`)
     reconnectAttempts = 0
+    clearIntervals() // clear any leftover intervals from previous session
 
     setTimeout(() => {
-      bot.chat('/afk 20')
-      console.log('Sent /afk 20 - AFK Lobby 20 activated')
+      if (bot) {
+        bot.chat('/afk 20')
+        console.log('Sent /afk 20 - AFK Lobby 20 activated')
+      }
     }, 6000)
 
-    setInterval(() => {
-      if (bot && bot.entity) {
-        bot.setControlState('jump', true)
+    // FIX 2: capture bot reference at interval creation time
+    const jumpInterval = setInterval(() => {
+      const b = bot
+      if (b && b.entity) {
+        b.setControlState('jump', true)
         setTimeout(() => {
-          if (bot) bot.setControlState('jump', false)
+          if (b && b.entity) b.setControlState('jump', false)
         }, 180)
       }
     }, 550)
 
-    setInterval(() => {
-      if (bot && bot.entity) {
-        bot.look(bot.entity.yaw + (Math.random() * 0.8 - 0.4), bot.entity.pitch)
+    const lookInterval = setInterval(() => {
+      const b = bot
+      if (b && b.entity) {
+        b.look(b.entity.yaw + (Math.random() * 0.8 - 0.4), b.entity.pitch)
       }
     }, 8500)
+
+    activeIntervals.push(jumpInterval, lookInterval) // FIX 1: track them
   })
 
   bot.on('kicked', (reason) => {
@@ -72,6 +86,7 @@ async function createBot(username) {
   })
 
   bot.on('end', () => {
+    if (isReconnecting) return // FIX 3: kicked already triggered reconnect
     console.log('Connection lost. Reconnecting in 5 minutes...')
     reconnect()
   })
@@ -82,8 +97,11 @@ async function createBot(username) {
 }
 
 function reconnect() {
-  // Prevent duplicate reconnect timers
+  if (isReconnecting) return // FIX 3: deduplicate
   if (reconnectTimer) return
+
+  isReconnecting = true
+  clearIntervals() // FIX 1: stop all intervals immediately
 
   if (reconnectAttempts >= MAX_RECONNECT) {
     console.log('Too many reconnect attempts. Stopping bot.')
@@ -96,27 +114,19 @@ function reconnect() {
 
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null
-
-    // FIX: use bot.end() instead of bot.quit()
-    if (bot && typeof bot.end === 'function') {
-      bot.end()
-    }
+    if (bot && typeof bot.end === 'function') bot.end()
     bot = null
-
     createBot(savedUsername)
   }, 300000)
 }
 
 console.log('DonutSMP AFK Bot started.\n')
-
-askUsername().then((username) => {
-  createBot(username)
-})
+askUsername().then((username) => createBot(username))
 
 process.on('SIGINT', () => {
   console.log('\nBot shutting down...')
+  clearIntervals()
   if (reconnectTimer) clearTimeout(reconnectTimer)
-  // FIX: use bot.end() instead of bot.quit()
   if (bot && typeof bot.end === 'function') bot.end()
   rl.close()
   process.exit(0)
