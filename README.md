@@ -129,3 +129,14 @@ By using this software, you agree that:
 - The author takes no responsibility for bans, account restrictions, or penalties
 
 **Use at your own risk. Intended for educational purposes, research, and personal experimentation only.**
+
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=c8dhjp4tyv-bit%2FDonutSMP-shard-bot&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=c8dhjp4tyv-bit/DonutSMP-shard-bot&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=c8dhjp4tyv-bit/DonutSMP-shard-bot&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=c8dhjp4tyv-bit/DonutSMP-shard-bot&type=date&legend=top-left" />
+ </picture>
+</a>
